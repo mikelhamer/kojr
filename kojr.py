@@ -5,24 +5,32 @@ import time
 
 time.sleep(1)
 
+# setup GPIO
 io.setmode(io.BCM)
 solenoid = 25
 io.setup(solenoid, io.OUT)
 
+# start the game
 io.output(solenoid, 1)
 time.sleep(0.05)
 io.output(solenoid, 0)
 time.sleep(1)
 
+# initial jump interval of .60 seconds
 timing = 0.60
+# Tricky variable is for every other jump in the "double tap" jumps of 200-300
 tricky = False
+
 try:
     for jump in range(1, 1000):
         print jump
+        # push the solenoid 
         io.output(solenoid, 1)
         time.sleep(0.05)
+        # pull the solenoid
         io.output(solenoid, 0)
-   
+
+        # adjust the timing for the current jump
         if jump == 20:
             timing = 0.489
         elif jump == 49:
@@ -37,6 +45,7 @@ try:
 
         time.sleep(timing)
 
+        # For the tricky "double tap" tricky jumps between 200-300
         if jump in range(201, 298):
 	    if tricky == True:
                 time.sleep(0.07)
